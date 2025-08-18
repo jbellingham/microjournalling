@@ -1,0 +1,11 @@
+<%= link_to toggle_favorite_achievement_path(achievement), 
+    method: :patch, 
+    class: "btn btn-secondary favorite-btn-large #{'favorite-active' if achievement.favorite}",
+    data: { turbo_method: :patch },
+    id: "favorite_button_large_#{achievement.id}" do %>
+  <% if achievement.favorite? %>
+    ★ Remove from Favorites
+  <% else %>
+    ☆ Add to Favorites
+  <% end %>
+<% end %>

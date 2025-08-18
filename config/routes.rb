@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       get :weekly
       get :monthly
     end
+    member do
+      patch :toggle_favorite
+    end
   end
   root "achievements#index"
   

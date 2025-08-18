@@ -23,7 +23,7 @@
 <div class="brag-doc-export">
   <div class="export-header">
     <h2>Your Brag Document</h2>
-    <p>This document organizes your achievements for promotion and performance review purposes.</p>
+    <p>This document shows your <strong>favorite achievements from <%= Date.current.year %></strong> - your curated list for promotion and performance review purposes.</p>
     
     <div class="export-actions">
       <%= link_to "Download as Text", brag_doc_export_path(format: :text), 
@@ -36,17 +36,22 @@
   <div class="export-stats">
     <div class="stat-card">
       <div class="stat-number"><%= @achievements.count %></div>
-      <div class="stat-label">Total Achievements</div>
+      <div class="stat-label">Favorite Achievements</div>
     </div>
     
     <div class="stat-card">
       <div class="stat-number"><%= @achievements_by_brag_category.count %></div>
-      <div class="stat-label">Brag Doc Categories</div>
+      <div class="stat-label">Categories Covered</div>
     </div>
     
     <div class="stat-card">
-      <div class="stat-number"><%= @recent_achievements.count %></div>
-      <div class="stat-label">This Year</div>
+      <div class="stat-number"><%= @total_favorites %></div>
+      <div class="stat-label">Total Favorites</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-number"><%= @current_year_count %></div>
+      <div class="stat-label">This Year Total</div>
     </div>
   </div>
 
@@ -111,9 +116,12 @@
 
     <% if @achievements_by_brag_category.empty? %>
       <div class="empty-state">
-        <h3>No brag doc achievements yet</h3>
-        <p>Add brag doc categories to your achievements to see them organized here.</p>
-        <%= link_to "Add Achievement", new_achievement_path, class: "btn btn-primary" %>
+        <h3>No favorite achievements from <%= Date.current.year %> yet</h3>
+        <p>Mark your best achievements as favorites to see them in your brag document. Use the ★ button on achievements to add them to your favorites.</p>
+        <div class="empty-state-actions">
+          <%= link_to "View All Achievements", achievements_path, class: "btn btn-primary" %>
+          <%= link_to "Add New Achievement", new_achievement_path, class: "btn btn-secondary" %>
+        </div>
       </div>
     <% end %>
   </div>

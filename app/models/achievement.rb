@@ -64,4 +64,8 @@ class Achievement < ApplicationRecord
   def category_description
     category_info&.dig(:description) || ''
   end
+  
+  scope :favorites, -> { where(favorite: true) }
+  scope :current_year, -> { where(date: Date.current.beginning_of_year..Date.current.end_of_year) }
+  scope :favorite_current_year, -> { favorites.current_year }
 end

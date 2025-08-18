@@ -1,5 +1,5 @@
 class AchievementsController < ApplicationController
-  before_action :set_achievement, only: [:show, :edit, :update, :destroy]
+  before_action :set_achievement, only: [:show, :edit, :update, :destroy, :toggle_favorite]
 
   def index
     @achievements = current_user.achievements
@@ -90,6 +90,21 @@ class AchievementsController < ApplicationController
   def destroy
     @achievement.destroy
     redirect_to achievements_url, notice: 'Achievement was successfully deleted.'
+  end
+
+  def toggle_favorite
+    @achievement.update!(favorite: !@achievement.favorite)
+    
+    respond_to do |format|
+      format.html { redirect_back_or_to achievement_path(@achievement) }
+      format.turbo_stream { 
+        # Update both button types that might be present
+        render turbo_stream: [
+          turbo_stream.replace("favorite_button_#{@achievement.id}", partial: "achievements/favorite_button", locals: { achievement: @achievement }),
+          turbo_stream.replace("favorite_button_large_#{@achievement.id}", partial: "achievements/favorite_button_large", locals: { achievement: @achievement })
+        ]
+      }
+    end
   end
 
   private

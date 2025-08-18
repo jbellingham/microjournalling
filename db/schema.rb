@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_18_094020) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_18_100428) do
   create_table "achievements", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_18_094020) do
     t.text "collaboration_details"
     t.text "learning_outcomes"
     t.text "goals_supported"
+    t.boolean "favorite", default: false, null: false
     t.index ["user_id"], name: "index_achievements_on_user_id"
   end
 

@@ -77,6 +77,7 @@
         <% end %>
         <p class="achievement-description"><%= achievement.description %></p>
         <div class="achievement-actions">
+          <%= render "favorite_button", achievement: achievement %>
           <%= link_to "View", achievement, class: "btn btn-sm", data: { turbo_frame: "_top" } %>
           <%= link_to "Edit", edit_achievement_path(achievement), class: "btn btn-sm", data: { turbo_frame: dom_id(achievement) } %>
           <%= link_to "Delete", achievement, method: :delete, 

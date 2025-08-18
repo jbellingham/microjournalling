@@ -79,6 +79,7 @@
   </div>
 
   <div class="achievement-actions">
+    <%= render "favorite_button_large", achievement: @achievement %>
     <%= link_to "Edit Achievement", edit_achievement_path(@achievement), class: "btn btn-primary" %>
     <%= link_to "Delete Achievement", @achievement, method: :delete, 
                 confirm: "Are you sure you want to delete this achievement?", 

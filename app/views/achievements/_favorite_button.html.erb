@@ -1,0 +1,12 @@
+<%= link_to toggle_favorite_achievement_path(achievement), 
+    method: :patch, 
+    class: "btn btn-sm favorite-btn #{'favorite-active' if achievement.favorite}",
+    data: { turbo_method: :patch },
+    title: achievement.favorite? ? "Remove from favorites" : "Add to favorites",
+    id: "favorite_button_#{achievement.id}" do %>
+  <% if achievement.favorite? %>
+    ★
+  <% else %>
+    ☆
+  <% end %>
+<% end %>

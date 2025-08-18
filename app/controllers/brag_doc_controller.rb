@@ -1,8 +1,15 @@
 class BragDocController < ApplicationController
   def export
-    @achievements = current_user.achievements.order(date: :desc)
-    @achievements_by_brag_category = @achievements.select(&:is_brag_doc_category?).group_by(&:category)
-    @recent_achievements = @achievements.where('date >= ?', 1.year.ago)
+    @all_achievements = current_user.achievements.order(date: :desc)
+    
+    # Show only favorites from current year for brag doc export
+    @achievements = current_user.achievements.favorite_current_year.order(date: :desc)
+    @achievements_by_brag_category = @achievements.group_by(&:category)
+    
+    # Stats for the export header
+    @total_achievements = @all_achievements.count
+    @total_favorites = @all_achievements.favorites.count
+    @current_year_count = @all_achievements.current_year.count
     
     respond_to do |format|
       format.html
