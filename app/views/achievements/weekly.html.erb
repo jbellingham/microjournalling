@@ -1,0 +1,103 @@
+<div class="achievements-header">
+  <h1>My Work Achievements</h1>
+  <div class="header-actions">
+    <button class="theme-toggle" data-controller="theme" data-action="click->theme#toggle" aria-label="Toggle dark mode">
+      <span class="theme-icon theme-icon-light">☀️</span>
+      <span class="theme-icon theme-icon-dark">🌙</span>
+    </button>
+    <%= link_to "Add New Achievement", new_achievement_path, class: "btn btn-primary", data: { turbo_frame: "achievement_form" } %>
+  </div>
+</div>
+
+<nav class="view-tabs">
+  <%= link_to "All Achievements", achievements_path, class: "tab-link" %>
+  <%= link_to "Weekly View", weekly_achievements_path, class: "tab-link active" %>
+  <%= link_to "Monthly View", monthly_achievements_path, class: "tab-link" %>
+</nav>
+
+<%= turbo_frame_tag "achievement_form" %>
+
+<div class="period-navigation">
+  <%= link_to "← Previous Week", weekly_achievements_path(week: @prev_week), class: "nav-button" %>
+  <h2 class="period-title">
+    Week of <%= @current_week.strftime("%B %d") %> - <%= @week_end.strftime("%B %d, %Y") %>
+  </h2>
+  <%= link_to "Next Week →", weekly_achievements_path(week: @next_week), class: "nav-button" %>
+</div>
+
+<div class="summary-stats">
+  <div class="stat-card">
+    <div class="stat-number"><%= @achievements.count %></div>
+    <div class="stat-label">Total Achievements</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-number"><%= @achievements_by_category.count %></div>
+    <div class="stat-label">Categories</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-number"><%= @achievements_by_day.count %></div>
+    <div class="stat-label">Active Days</div>
+  </div>
+</div>
+
+<% if @achievements.any? %>
+  <div class="summary-sections">
+    <!-- Category Breakdown -->
+    <div class="summary-section">
+      <h3>Achievements by Category</h3>
+      <div class="category-breakdown">
+        <% @achievements_by_category.each do |category, achievements| %>
+          <div class="category-group">
+            <div class="category-header">
+              <span class="category-name"><%= category %></span>
+              <span class="category-count"><%= achievements.count %> achievement<%= 's' if achievements.count != 1 %></span>
+            </div>
+            <div class="category-achievements">
+              <% achievements.each do |achievement| %>
+                <div class="mini-achievement">
+                  <div class="mini-achievement-title"><%= achievement.title %></div>
+                  <div class="mini-achievement-date"><%= achievement.date.strftime("%m/%d") %></div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Daily Timeline -->
+    <div class="summary-section">
+      <h3>Daily Timeline</h3>
+      <div class="daily-timeline">
+        <% (@current_week..@week_end).each do |date| %>
+          <div class="timeline-day <%= 'has-achievements' if @achievements_by_day[date] %>">
+            <div class="day-header">
+              <div class="day-name"><%= date.strftime("%A") %></div>
+              <div class="day-date"><%= date.strftime("%m/%d") %></div>
+            </div>
+            <div class="day-achievements">
+              <% if @achievements_by_day[date] %>
+                <% @achievements_by_day[date].each do |achievement| %>
+                  <div class="timeline-achievement">
+                    <%= link_to achievement.title, achievement, class: "achievement-link" %>
+                    <span class="achievement-category-badge"><%= achievement.category %></span>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="no-achievements">No achievements</div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="empty-state">
+    <h2>No achievements this week</h2>
+    <p>No achievements were recorded for the week of <%= @current_week.strftime("%B %d") %> - <%= @week_end.strftime("%B %d, %Y") %>.</p>
+    <%= link_to "Add Achievement", new_achievement_path, class: "btn btn-primary", data: { turbo_frame: "achievement_form" } %>
+  </div>
+<% end %>

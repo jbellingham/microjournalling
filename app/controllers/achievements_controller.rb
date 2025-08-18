@@ -24,6 +24,44 @@ class AchievementsController < ApplicationController
   def show
   end
 
+  def weekly
+    # Get the week parameter or default to current week
+    if params[:week].present?
+      date = Date.parse(params[:week])
+    else
+      date = Date.current
+    end
+    
+    @current_week = date.beginning_of_week
+    @week_end = @current_week.end_of_week
+    
+    @achievements = Achievement.where(date: @current_week..@week_end).order(date: :desc)
+    @achievements_by_category = @achievements.group_by(&:category)
+    @achievements_by_day = @achievements.group_by(&:date)
+    
+    @prev_week = @current_week - 1.week
+    @next_week = @current_week + 1.week
+  end
+
+  def monthly
+    # Get the month parameter or default to current month
+    if params[:month].present?
+      date = Date.parse(params[:month])
+    else
+      date = Date.current
+    end
+    
+    @current_month = date.beginning_of_month
+    @month_end = @current_month.end_of_month
+    
+    @achievements = Achievement.where(date: @current_month..@month_end).order(date: :desc)
+    @achievements_by_category = @achievements.group_by(&:category)
+    @achievements_by_week = group_achievements_by_week(@achievements)
+    
+    @prev_month = @current_month - 1.month
+    @next_month = @current_month + 1.month
+  end
+
   def new
     @achievement = Achievement.new
   end
@@ -62,5 +100,9 @@ class AchievementsController < ApplicationController
 
   def achievement_params
     params.require(:achievement).permit(:title, :description, :date, :category)
+  end
+
+  def group_achievements_by_week(achievements)
+    achievements.group_by { |achievement| achievement.date&.beginning_of_week }
   end
 end

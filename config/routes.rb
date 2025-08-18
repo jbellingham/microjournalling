@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :achievements
+  resources :achievements do
+    collection do
+      get :weekly
+      get :monthly
+    end
+  end
   root "achievements#index"
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
