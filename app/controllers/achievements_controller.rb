@@ -2,7 +2,23 @@ class AchievementsController < ApplicationController
   before_action :set_achievement, only: [:show, :edit, :update, :destroy]
 
   def index
-    @achievements = Achievement.order(date: :desc).page(params[:page]).per(20)
+    @achievements = Achievement.all
+    
+    # Apply category filter
+    if params[:category].present?
+      @achievements = @achievements.where(category: params[:category])
+    end
+    
+    # Apply date range filters
+    if params[:date_from].present?
+      @achievements = @achievements.where('date >= ?', params[:date_from])
+    end
+    
+    if params[:date_to].present?
+      @achievements = @achievements.where('date <= ?', params[:date_to])
+    end
+    
+    @achievements = @achievements.order(date: :desc).page(params[:page]).per(20)
   end
 
   def show

@@ -5,6 +5,58 @@
 
 <%= turbo_frame_tag "achievement_form" %>
 
+<div class="filters-section">
+  <%= form_with url: achievements_path, method: :get, local: true, class: "filters-form" do |form| %>
+    <div class="filter-group">
+      <%= form.label :category, "Category:", class: "filter-label" %>
+      <%= form.select :category, 
+          options_for_select([
+            ['All Categories', ''],
+            ['Project Completion', 'Project Completion'],
+            ['Leadership', 'Leadership'],
+            ['Innovation', 'Innovation'],
+            ['Team Collaboration', 'Team Collaboration'],
+            ['Learning & Development', 'Learning & Development'],
+            ['Problem Solving', 'Problem Solving'],
+            ['Recognition', 'Recognition'],
+            ['Other', 'Other']
+          ], params[:category]), 
+          {}, 
+          { class: "filter-select" } %>
+    </div>
+
+    <div class="filter-group">
+      <%= form.label :date_from, "From Date:", class: "filter-label" %>
+      <%= form.date_field :date_from, value: params[:date_from], class: "filter-input" %>
+    </div>
+
+    <div class="filter-group">
+      <%= form.label :date_to, "To Date:", class: "filter-label" %>
+      <%= form.date_field :date_to, value: params[:date_to], class: "filter-input" %>
+    </div>
+
+    <div class="filter-actions">
+      <%= form.submit "Apply Filters", class: "btn btn-primary btn-sm" %>
+      <%= link_to "Clear Filters", achievements_path, class: "btn btn-secondary btn-sm" %>
+    </div>
+  <% end %>
+</div>
+
+<% if params[:category].present? || params[:date_from].present? || params[:date_to].present? %>
+  <div class="filter-info">
+    <strong>Active Filters:</strong>
+    <% if params[:category].present? %>
+      Category: <%= params[:category] %>
+    <% end %>
+    <% if params[:date_from].present? %>
+      From: <%= Date.parse(params[:date_from]).strftime("%B %d, %Y") %>
+    <% end %>
+    <% if params[:date_to].present? %>
+      To: <%= Date.parse(params[:date_to]).strftime("%B %d, %Y") %>
+    <% end %>
+  </div>
+<% end %>
+
 <div id="achievements" class="achievements-list">
   <% @achievements.each do |achievement| %>
     <%= turbo_frame_tag dom_id(achievement), class: "achievement-card" do %>
@@ -28,12 +80,18 @@
   <% end %>
 </div>
 
-<%= paginate @achievements if @achievements.respond_to?(:current_page) %>
+<%= paginate @achievements, params: { category: params[:category], date_from: params[:date_from], date_to: params[:date_to] } if @achievements.respond_to?(:current_page) %>
 
 <% if @achievements.empty? %>
   <div class="empty-state">
-    <h2>No achievements yet!</h2>
-    <p>Start logging your wins and achievements at work.</p>
-    <%= link_to "Add Your First Achievement", new_achievement_path, class: "btn btn-primary", data: { turbo_frame: "achievement_form" } %>
+    <% if params[:category].present? || params[:date_from].present? || params[:date_to].present? %>
+      <h2>No achievements found</h2>
+      <p>No achievements match your current filters. Try adjusting your search criteria.</p>
+      <%= link_to "Clear Filters", achievements_path, class: "btn btn-secondary" %>
+    <% else %>
+      <h2>No achievements yet!</h2>
+      <p>Start logging your wins and achievements at work.</p>
+      <%= link_to "Add Your First Achievement", new_achievement_path, class: "btn btn-primary", data: { turbo_frame: "achievement_form" } %>
+    <% end %>
   </div>
 <% end %>
