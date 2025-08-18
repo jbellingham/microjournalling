@@ -2,7 +2,7 @@ class AchievementsController < ApplicationController
   before_action :set_achievement, only: [:show, :edit, :update, :destroy]
 
   def index
-    @achievements = Achievement.all
+    @achievements = current_user.achievements
     
     # Apply category filter
     if params[:category].present?
@@ -35,7 +35,7 @@ class AchievementsController < ApplicationController
     @current_week = date.beginning_of_week
     @week_end = @current_week.end_of_week
     
-    @achievements = Achievement.where(date: @current_week..@week_end).order(date: :desc)
+    @achievements = current_user.achievements.where(date: @current_week..@week_end).order(date: :desc)
     @achievements_by_category = @achievements.group_by(&:category)
     @achievements_by_day = @achievements.group_by(&:date)
     
@@ -54,7 +54,7 @@ class AchievementsController < ApplicationController
     @current_month = date.beginning_of_month
     @month_end = @current_month.end_of_month
     
-    @achievements = Achievement.where(date: @current_month..@month_end).order(date: :desc)
+    @achievements = current_user.achievements.where(date: @current_month..@month_end).order(date: :desc)
     @achievements_by_category = @achievements.group_by(&:category)
     @achievements_by_week = group_achievements_by_week(@achievements)
     
@@ -67,7 +67,7 @@ class AchievementsController < ApplicationController
   end
 
   def create
-    @achievement = Achievement.new(achievement_params)
+    @achievement = current_user.achievements.build(achievement_params)
     
     if @achievement.save
       redirect_to @achievement, notice: 'Achievement was successfully created.'
@@ -95,7 +95,7 @@ class AchievementsController < ApplicationController
   private
 
   def set_achievement
-    @achievement = Achievement.find(params[:id])
+    @achievement = current_user.achievements.find(params[:id])
   end
 
   def achievement_params

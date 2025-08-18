@@ -1,6 +1,10 @@
 <div class="achievements-header">
   <h1>My Work Achievements</h1>
   <div class="header-actions">
+    <div class="user-info">
+      <span class="user-name">Welcome, <%= current_user.name %>!</span>
+      <%= link_to "Logout", logout_path, class: "btn btn-secondary btn-sm", data: { turbo_method: :delete } %>
+    </div>
     <button class="theme-toggle" data-controller="theme" data-action="click->theme#toggle" aria-label="Toggle dark mode">
       <span class="theme-icon theme-icon-light">☀️</span>
       <span class="theme-icon theme-icon-dark">🌙</span>
