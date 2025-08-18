@@ -2,7 +2,7 @@ class AchievementsController < ApplicationController
   before_action :set_achievement, only: [:show, :edit, :update, :destroy]
 
   def index
-    @achievements = Achievement.order(date: :desc)
+    @achievements = Achievement.order(date: :desc).page(params[:page]).per(20)
   end
 
   def show
