@@ -1,0 +1,26 @@
+<div class="achievement-detail">
+  <div class="achievement-header">
+    <h1><%= @achievement.title %></h1>
+    <div class="achievement-meta">
+      <% if @achievement.date %>
+        <span class="achievement-date"><%= @achievement.date.strftime("%B %d, %Y") %></span>
+      <% end %>
+      <% if @achievement.category.present? %>
+        <span class="achievement-category"><%= @achievement.category %></span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="achievement-description">
+    <%= simple_format(@achievement.description) %>
+  </div>
+
+  <div class="achievement-actions">
+    <%= link_to "Edit", edit_achievement_path(@achievement), class: "btn btn-primary" %>
+    <%= link_to "Delete", @achievement, method: :delete, 
+                confirm: "Are you sure?", 
+                class: "btn btn-danger",
+                data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <%= link_to "Back to All Achievements", achievements_path, class: "btn btn-secondary" %>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="achievements-header">
+  <h1>My Work Achievements</h1>
+  <%= link_to "Add New Achievement", new_achievement_path, class: "btn btn-primary", data: { turbo_frame: "achievement_form" } %>
+</div>
+
+<%= turbo_frame_tag "achievement_form" %>
+
+<div id="achievements" class="achievements-list">
+  <% @achievements.each do |achievement| %>
+    <%= turbo_frame_tag dom_id(achievement), class: "achievement-card" do %>
+      <div class="achievement-content">
+        <h3><%= achievement.title %></h3>
+        <p class="achievement-date"><%= achievement.date.strftime("%B %d, %Y") if achievement.date %></p>
+        <% if achievement.category.present? %>
+          <span class="achievement-category"><%= achievement.category %></span>
+        <% end %>
+        <p class="achievement-description"><%= achievement.description %></p>
+        <div class="achievement-actions">
+          <%= link_to "View", achievement, class: "btn btn-sm", data: { turbo_frame: "_top" } %>
+          <%= link_to "Edit", edit_achievement_path(achievement), class: "btn btn-sm", data: { turbo_frame: dom_id(achievement) } %>
+          <%= link_to "Delete", achievement, method: :delete, 
+                      confirm: "Are you sure?", 
+                      class: "btn btn-sm btn-danger",
+                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @achievements.empty? %>
+  <div class="empty-state">
+    <h2>No achievements yet!</h2>
+    <p>Start logging your wins and achievements at work.</p>
+    <%= link_to "Add Your First Achievement", new_achievement_path, class: "btn btn-primary", data: { turbo_frame: "achievement_form" } %>
+  </div>
+<% end %>
