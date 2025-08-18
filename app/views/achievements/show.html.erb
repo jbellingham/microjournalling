@@ -1,33 +1,88 @@
-<div class="page-header">
-  <button class="theme-toggle" data-controller="theme" data-action="click->theme#toggle" aria-label="Toggle dark mode">
-    <span class="theme-icon theme-icon-light">☀️</span>
-    <span class="theme-icon theme-icon-dark">🌙</span>
-  </button>
+<div class="achievements-header">
+  <h1>Achievement Details</h1>
+  <div class="header-actions">
+    <div class="user-info">
+      <span class="user-name">Welcome, <%= current_user.name %>!</span>
+      <%= link_to "Logout", logout_path, class: "btn btn-secondary btn-sm", data: { turbo_method: :delete } %>
+    </div>
+    <button class="theme-toggle" data-controller="theme" data-action="click->theme#toggle" aria-label="Toggle dark mode">
+      <span class="theme-icon theme-icon-light">☀️</span>
+      <span class="theme-icon theme-icon-dark">🌙</span>
+    </button>
+    <%= link_to "Back to Achievements", achievements_path, class: "btn btn-secondary" %>
+  </div>
 </div>
+
+<nav class="view-tabs">
+  <%= link_to "All Achievements", achievements_path, class: "tab-link" %>
+  <%= link_to "Weekly View", weekly_achievements_path, class: "tab-link" %>
+  <%= link_to "Monthly View", monthly_achievements_path, class: "tab-link" %>
+  <%= link_to "Brag Doc Export", brag_doc_export_path, class: "tab-link" %>
+</nav>
 
 <div class="achievement-detail">
   <div class="achievement-header">
     <h1><%= @achievement.title %></h1>
     <div class="achievement-meta">
-      <% if @achievement.date %>
-        <span class="achievement-date"><%= @achievement.date.strftime("%B %d, %Y") %></span>
-      <% end %>
-      <% if @achievement.category.present? %>
-        <span class="achievement-category"><%= @achievement.category %></span>
-      <% end %>
+      <span class="achievement-date">
+        <strong>Date:</strong> <%= @achievement.date.strftime("%B %d, %Y") if @achievement.date %>
+      </span>
+      <span class="achievement-category brag-doc-category">
+        <strong>Category:</strong> <%= @achievement.display_category %>
+      </span>
     </div>
   </div>
 
-  <div class="achievement-description">
-    <%= simple_format(@achievement.description) %>
+  <div class="achievement-content">
+    <div class="achievement-section">
+      <h3>Description</h3>
+      <div class="section-content">
+        <%= simple_format(@achievement.description) %>
+      </div>
+    </div>
+
+    <% if @achievement.impact_metrics.present? %>
+      <div class="achievement-section">
+        <h3>Impact & Results</h3>
+        <div class="section-content impact-metrics">
+          <%= simple_format(@achievement.impact_metrics) %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @achievement.collaboration_details.present? %>
+      <div class="achievement-section">
+        <h3>Collaboration & Mentorship</h3>
+        <div class="section-content collaboration-details">
+          <%= simple_format(@achievement.collaboration_details) %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @achievement.learning_outcomes.present? %>
+      <div class="achievement-section">
+        <h3>Learning & Development</h3>
+        <div class="section-content learning-outcomes">
+          <%= simple_format(@achievement.learning_outcomes) %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @achievement.goals_supported.present? %>
+      <div class="achievement-section">
+        <h3>Goals & Objectives Supported</h3>
+        <div class="section-content goals-supported">
+          <%= simple_format(@achievement.goals_supported) %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div class="achievement-actions">
-    <%= link_to "Edit", edit_achievement_path(@achievement), class: "btn btn-primary" %>
-    <%= link_to "Delete", @achievement, method: :delete, 
-                confirm: "Are you sure?", 
+    <%= link_to "Edit Achievement", edit_achievement_path(@achievement), class: "btn btn-primary" %>
+    <%= link_to "Delete Achievement", @achievement, method: :delete, 
+                confirm: "Are you sure you want to delete this achievement?", 
                 class: "btn btn-danger",
-                data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-    <%= link_to "Back to All Achievements", achievements_path, class: "btn btn-secondary" %>
+                data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this achievement?" } %>
   </div>
 </div>

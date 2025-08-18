@@ -318,3 +318,206 @@
   background: var(--bg-primary);
   border-color: var(--btn-primary-bg);
 }
+
+/* Achievement Detail Page Styling */
+.achievement-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.achievement-header {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.achievement-header h1 {
+  color: var(--text-primary, #2c3e50);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.achievement-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.achievement-meta strong {
+  color: var(--text-primary, #2c3e50);
+}
+
+.achievement-date {
+  color: var(--text-secondary, #495057);
+  font-size: 1rem;
+}
+
+.achievement-content {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.achievement-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+}
+
+.achievement-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.achievement-section h3 {
+  color: var(--text-primary, #2c3e50);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.achievement-section h3::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1.25rem;
+  background: var(--btn-primary-bg, #007bff);
+  margin-right: 0.75rem;
+  border-radius: 2px;
+}
+
+.section-content {
+  color: var(--text-secondary, #495057);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.section-content p {
+  margin: 0 0 1rem 0;
+}
+
+.section-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Specific styling for different brag doc sections */
+.impact-metrics {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+}
+
+.collaboration-details {
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.05));
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.learning-outcomes {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+}
+
+.goals-supported {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.1), rgba(108, 117, 125, 0.05));
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #6c757d;
+}
+
+.achievement-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+}
+
+/* Responsive design for achievement detail */
+@media (max-width: 768px) {
+  .achievement-detail {
+    padding: 0 0.5rem;
+  }
+  
+  .achievement-header {
+    padding: 1.5rem;
+  }
+  
+  .achievement-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .achievement-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .achievement-content {
+    padding: 1.5rem;
+  }
+  
+  .achievement-section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .achievement-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievement-header {
+    padding: 1rem;
+  }
+  
+  .achievement-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .achievement-content {
+    padding: 1rem;
+  }
+}
+
+/* Dark mode support for achievement detail */
+[data-theme="dark"] .achievement-header,
+[data-theme="dark"] .achievement-content {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .achievement-section {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .impact-metrics {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(40, 167, 69, 0.1));
+}
+
+[data-theme="dark"] .collaboration-details {
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.2), rgba(0, 123, 255, 0.1));
+}
+
+[data-theme="dark"] .learning-outcomes {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+}
+
+[data-theme="dark"] .goals-supported {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.2), rgba(108, 117, 125, 0.1));
+}
