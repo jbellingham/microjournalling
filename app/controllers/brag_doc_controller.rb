@@ -2,19 +2,39 @@ class BragDocController < ApplicationController
   def export
     @all_achievements = current_user.achievements.order(date: :desc)
     
-    # Show only favorites from current year for brag doc export
-    @achievements = current_user.achievements.favorite_current_year.order(date: :desc)
-    @achievements_by_brag_category = @achievements.group_by(&:category)
+    # Show current year favorites as shortlist for selection
+    @shortlist_achievements = current_user.achievements.favorite_current_year.order(date: :desc)
+    
+    # Show only selected achievements in final export
+    @export_achievements = current_user.achievements.brag_doc_shortlist.order(date: :desc)
+    @achievements_by_brag_category = @export_achievements.group_by(&:category)
     
     # Stats for the export header
     @total_achievements = @all_achievements.count
     @total_favorites = @all_achievements.favorites.count
     @current_year_count = @all_achievements.current_year.count
+    @shortlist_count = @shortlist_achievements.count
+    @export_count = @export_achievements.count
     
     respond_to do |format|
       format.html
       format.text { render plain: generate_brag_doc_text }
     end
+  end
+  
+  def update_selections
+    # Get the list of achievement IDs that should be included
+    included_ids = params[:achievement_ids] || []
+    
+    # First, set all current year favorites to not included
+    current_user.achievements.favorite_current_year.update_all(include_in_brag_doc: false)
+    
+    # Then, set the selected ones to included
+    if included_ids.any?
+      current_user.achievements.where(id: included_ids).update_all(include_in_brag_doc: true)
+    end
+    
+    redirect_to brag_doc_export_path, notice: 'Brag doc selections updated successfully!'
   end
 
   private
@@ -34,7 +54,7 @@ class BragDocController < ApplicationController
     
     # Process each brag doc category
     Achievement.brag_doc_categories.each do |category|
-      achievements_in_category = @achievements_by_brag_category[category] || []
+      achievements_in_category = @export_achievements.select { |a| a.category == category }
       next if achievements_in_category.empty?
       
       doc << "## #{Achievement::CATEGORIES[category][:name]}"

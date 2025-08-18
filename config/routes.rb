@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get "brag_doc/export"
+  patch "brag_doc/update_selections"
   get "users/new"
   get "users/create"
   # Authentication routes

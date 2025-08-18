@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_18_100428) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_18_101819) do
   create_table "achievements", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -24,6 +24,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_18_100428) do
     t.text "learning_outcomes"
     t.text "goals_supported"
     t.boolean "favorite", default: false, null: false
+    t.boolean "include_in_brag_doc", default: false, null: false
     t.index ["user_id"], name: "index_achievements_on_user_id"
   end
 

@@ -22,21 +22,19 @@
 
 <div class="brag-doc-export">
   <div class="export-header">
-    <h2>Your Brag Document</h2>
-    <p>This document shows your <strong>favorite achievements from <%= Date.current.year %></strong> - your curated list for promotion and performance review purposes.</p>
-    
-    <div class="export-actions">
-      <%= link_to "Download as Text", brag_doc_export_path(format: :text), 
-          class: "btn btn-primary", 
-          download: "brag_doc_#{Date.current.strftime('%Y_%m_%d')}.txt" %>
-      <button onclick="window.print()" class="btn btn-secondary">Print</button>
-    </div>
+    <h2>Brag Document Builder</h2>
+    <p>Curate your best achievements from your <strong><%= @shortlist_count %> favorites this year</strong> to create the perfect brag document.</p>
   </div>
 
   <div class="export-stats">
     <div class="stat-card">
-      <div class="stat-number"><%= @achievements.count %></div>
-      <div class="stat-label">Favorite Achievements</div>
+      <div class="stat-number"><%= @shortlist_count %></div>
+      <div class="stat-label">Shortlist (Favorites)</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-number"><%= @export_count %></div>
+      <div class="stat-label">Selected for Export</div>
     </div>
     
     <div class="stat-card">
@@ -45,84 +43,152 @@
     </div>
     
     <div class="stat-card">
-      <div class="stat-number"><%= @total_favorites %></div>
-      <div class="stat-label">Total Favorites</div>
-    </div>
-    
-    <div class="stat-card">
       <div class="stat-number"><%= @current_year_count %></div>
       <div class="stat-label">This Year Total</div>
     </div>
   </div>
 
-  <div class="brag-doc-content">
-    <div class="section">
-      <h3>Goals for this year:</h3>
-      <p class="placeholder-text">- Add your major goals here! Sharing your goals with your manager & coworkers is really nice because it helps them see how they can support you in accomplishing those goals!</p>
-    </div>
-
-    <% Achievement.brag_doc_categories.each do |category| %>
-      <% achievements_in_category = @achievements_by_brag_category[category] || [] %>
-      <% next if achievements_in_category.empty? %>
+  <!-- Shortlist Selection Interface -->
+  <div class="shortlist-section">
+    <h3>Select Achievements for Export</h3>
+    <p>Choose which of your favorite achievements to include in your final brag document:</p>
+    
+    <%= form_with url: brag_doc_update_selections_path, method: :patch, local: true, 
+        class: "shortlist-form", data: { controller: "brag-selection" } do |form| %>
       
-      <div class="section">
-        <h3><%= Achievement::CATEGORIES[category][:name] %></h3>
-        
-        <% achievements_in_category.each do |achievement| %>
-          <div class="achievement-entry">
-            <h4><%= achievement.title %></h4>
-            <div class="achievement-meta">
-              <span class="achievement-date"><%= achievement.date.strftime('%B %d, %Y') %></span>
-              <span class="achievement-category-badge"><%= achievement.display_category %></span>
-            </div>
+      <div class="shortlist-actions">
+        <button type="button" data-action="click->brag-selection#selectAll" class="btn btn-sm btn-secondary">
+          Select All
+        </button>
+        <button type="button" data-action="click->brag-selection#deselectAll" class="btn btn-sm btn-secondary">
+          Deselect All
+        </button>
+        <%= form.submit "Update Selection", class: "btn btn-primary" %>
+      </div>
+      
+      <div class="shortlist-achievements">
+        <% @shortlist_achievements.group_by(&:category).each do |category, achievements| %>
+          <div class="category-section">
+            <h4><%= Achievement::CATEGORIES[category][:name] %> (<%= achievements.count %>)</h4>
             
-            <% if achievement.description.present? %>
-              <div class="achievement-description">
-                <%= simple_format(achievement.description) %>
-              </div>
-            <% end %>
-            
-            <% if achievement.impact_metrics.present? %>
-              <div class="brag-detail">
-                <strong>Impact & Results:</strong>
-                <%= simple_format(achievement.impact_metrics) %>
-              </div>
-            <% end %>
-            
-            <% if achievement.collaboration_details.present? %>
-              <div class="brag-detail">
-                <strong>Collaboration:</strong>
-                <%= simple_format(achievement.collaboration_details) %>
-              </div>
-            <% end %>
-            
-            <% if achievement.learning_outcomes.present? %>
-              <div class="brag-detail">
-                <strong>Learning Outcomes:</strong>
-                <%= simple_format(achievement.learning_outcomes) %>
-              </div>
-            <% end %>
-            
-            <% if achievement.goals_supported.present? %>
-              <div class="brag-detail">
-                <strong>Goals Supported:</strong>
-                <%= simple_format(achievement.goals_supported) %>
+            <% achievements.each do |achievement| %>
+              <div class="shortlist-item">
+                <div class="shortlist-checkbox">
+                  <%= form.check_box :achievement_ids, 
+                      { multiple: true, checked: achievement.include_in_brag_doc, 
+                        data: { "brag-selection-target": "checkbox" } }, 
+                      achievement.id, "" %>
+                </div>
+                <div class="shortlist-content">
+                  <h5><%= achievement.title %></h5>
+                  <p class="shortlist-date"><%= achievement.date.strftime("%B %d, %Y") %></p>
+                  <% if achievement.description.present? %>
+                    <p class="shortlist-description"><%= truncate(achievement.description, length: 150) %></p>
+                  <% end %>
+                  <% if achievement.impact_metrics.present? %>
+                    <p class="shortlist-impact"><strong>Impact:</strong> <%= truncate(achievement.impact_metrics, length: 100) %></p>
+                  <% end %>
+                </div>
               </div>
             <% end %>
           </div>
         <% end %>
       </div>
+      
+      <div class="shortlist-actions bottom-actions">
+        <%= form.submit "Update Selection", class: "btn btn-primary btn-large" %>
+      </div>
     <% end %>
+  </div>
 
-    <% if @achievements_by_brag_category.empty? %>
-      <div class="empty-state">
-        <h3>No favorite achievements from <%= Date.current.year %> yet</h3>
-        <p>Mark your best achievements as favorites to see them in your brag document. Use the ★ button on achievements to add them to your favorites.</p>
+  <!-- Final Export Preview -->
+  <% if @export_count > 0 %>
+    <div class="final-export-section">
+      <div class="final-export-header">
+        <h3>Your Final Brag Document Preview</h3>
+        <p>This is what will be included in your exported document (<%= @export_count %> achievements selected):</p>
+        
+        <div class="export-actions">
+          <%= link_to "Download as Text", brag_doc_export_path(format: :text), 
+              class: "btn btn-primary", 
+              download: "brag_doc_#{Date.current.strftime('%Y_%m_%d')}.txt" %>
+          <button onclick="window.print()" class="btn btn-secondary">Print Preview</button>
+        </div>
+      </div>
+
+      <div class="brag-doc-content final-preview">
+        <div class="section">
+          <h3>Goals for this year:</h3>
+          <p class="placeholder-text">- Add your major goals here! Sharing your goals with your manager & coworkers is really nice because it helps them see how they can support you in accomplishing those goals!</p>
+        </div>
+
+        <% Achievement.brag_doc_categories.each do |category| %>
+          <% achievements_in_category = @achievements_by_brag_category[category] || [] %>
+          <% next if achievements_in_category.empty? %>
+          
+          <div class="section">
+            <h3><%= Achievement::CATEGORIES[category][:name] %></h3>
+            
+            <% achievements_in_category.each do |achievement| %>
+              <div class="achievement-entry">
+                <h4><%= achievement.title %></h4>
+                <div class="achievement-meta">
+                  <span class="achievement-date"><%= achievement.date.strftime('%B %d, %Y') %></span>
+                  <span class="achievement-category-badge"><%= achievement.display_category %></span>
+                </div>
+                
+                <% if achievement.description.present? %>
+                  <div class="achievement-description">
+                    <%= simple_format(achievement.description) %>
+                  </div>
+                <% end %>
+                
+                <% if achievement.impact_metrics.present? %>
+                  <div class="brag-detail">
+                    <strong>Impact & Results:</strong>
+                    <%= simple_format(achievement.impact_metrics) %>
+                  </div>
+                <% end %>
+                
+                <% if achievement.collaboration_details.present? %>
+                  <div class="brag-detail">
+                    <strong>Collaboration:</strong>
+                    <%= simple_format(achievement.collaboration_details) %>
+                  </div>
+                <% end %>
+                
+                <% if achievement.learning_outcomes.present? %>
+                  <div class="brag-detail">
+                    <strong>Learning Outcomes:</strong>
+                    <%= simple_format(achievement.learning_outcomes) %>
+                  </div>
+                <% end %>
+                
+                <% if achievement.goals_supported.present? %>
+                  <div class="brag-detail">
+                    <strong>Goals Supported:</strong>
+                    <%= simple_format(achievement.goals_supported) %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="empty-export-state">
+      <h3>No Achievements Selected</h3>
+      <% if @shortlist_count > 0 %>
+        <p>Select achievements from your shortlist above to see your brag document preview.</p>
+      <% else %>
+        <p>You need to mark some achievements as favorites first. Use the ★ button on achievements to add them to your shortlist.</p>
         <div class="empty-state-actions">
           <%= link_to "View All Achievements", achievements_path, class: "btn btn-primary" %>
           <%= link_to "Add New Achievement", new_achievement_path, class: "btn btn-secondary" %>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 </div>

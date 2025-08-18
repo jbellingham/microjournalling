@@ -68,4 +68,6 @@ class Achievement < ApplicationRecord
   scope :favorites, -> { where(favorite: true) }
   scope :current_year, -> { where(date: Date.current.beginning_of_year..Date.current.end_of_year) }
   scope :favorite_current_year, -> { favorites.current_year }
+  scope :brag_doc_included, -> { where(include_in_brag_doc: true) }
+  scope :brag_doc_shortlist, -> { favorites.current_year.brag_doc_included }
 end
