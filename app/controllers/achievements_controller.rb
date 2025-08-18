@@ -16,10 +16,7 @@ class AchievementsController < ApplicationController
     @achievement = Achievement.new(achievement_params)
     
     if @achievement.save
-      respond_to do |format|
-        format.html { redirect_to @achievement, notice: 'Achievement was successfully created.' }
-        format.turbo_stream { redirect_to @achievement, notice: 'Achievement was successfully created.' }
-      end
+      redirect_to @achievement, notice: 'Achievement was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,10 +27,7 @@ class AchievementsController < ApplicationController
 
   def update
     if @achievement.update(achievement_params)
-      respond_to do |format|
-        format.html { redirect_to @achievement, notice: 'Achievement was successfully updated.' }
-        format.turbo_stream { redirect_to @achievement, notice: 'Achievement was successfully updated.' }
-      end
+      redirect_to @achievement, notice: 'Achievement was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end

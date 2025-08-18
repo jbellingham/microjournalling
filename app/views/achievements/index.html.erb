@@ -21,7 +21,7 @@
           <%= link_to "Delete", achievement, method: :delete, 
                       confirm: "Are you sure?", 
                       class: "btn btn-sm btn-danger",
-                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_frame: "_top" } %>
         </div>
       </div>
     <% end %>
