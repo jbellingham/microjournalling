@@ -1,7 +1,7 @@
 class BragDocController < ApplicationController
   def export
     @achievements = current_user.achievements.order(date: :desc)
-    @achievements_by_brag_category = @achievements.where.not(brag_doc_category: [nil, '']).group_by(&:brag_doc_category)
+    @achievements_by_brag_category = @achievements.select(&:is_brag_doc_category?).group_by(&:category)
     @recent_achievements = @achievements.where('date >= ?', 1.year.ago)
     
     respond_to do |format|
@@ -26,11 +26,11 @@ class BragDocController < ApplicationController
     doc << ""
     
     # Process each brag doc category
-    Achievement::BRAG_DOC_CATEGORIES.each do |category|
+    Achievement.brag_doc_categories.each do |category|
       achievements_in_category = @achievements_by_brag_category[category] || []
       next if achievements_in_category.empty?
       
-      doc << "## #{category}"
+      doc << "## #{Achievement::CATEGORIES[category][:name]}"
       doc << ""
       
       achievements_in_category.each do |achievement|

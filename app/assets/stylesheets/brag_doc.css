@@ -257,6 +257,51 @@
   }
 }
 
+/* Unified category system styling */
+.brag-doc-category {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  position: relative;
+}
+
+.brag-doc-category::after {
+  content: "★";
+  margin-left: 0.25rem;
+  color: #ffd700;
+}
+
+.brag-doc-fields {
+  transition: all 0.3s ease;
+  border-top: 2px solid var(--btn-primary-bg, #007bff);
+  background: var(--bg-secondary, #ffffff);
+  border-radius: 8px;
+  margin-top: 1rem;
+  padding: 1.5rem;
+}
+
+.brag-doc-fields.active {
+  border-color: var(--btn-primary-bg, #007bff);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.section-subtitle {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.4;
+  text-align: center;
+}
+
+#category-description {
+  transition: color 0.3s ease;
+}
+
+/* Enhanced form styling */
+.form-group .form-control:focus {
+  border-color: var(--btn-primary-bg, #007bff);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
 /* Dark mode support */
 [data-theme="dark"] .export-header,
 [data-theme="dark"] .brag-doc-content,
@@ -267,4 +312,9 @@
 
 [data-theme="dark"] .achievement-entry {
   background: var(--bg-primary);
+}
+
+[data-theme="dark"] .brag-doc-fields {
+  background: var(--bg-primary);
+  border-color: var(--btn-primary-bg);
 }

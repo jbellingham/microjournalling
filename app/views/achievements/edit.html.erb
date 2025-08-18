@@ -30,33 +30,19 @@
       </div>
 
       <div class="form-group">
-        <%= form.label :category, "Traditional Category", class: "form-label" %>
+        <%= form.label :category, class: "form-label" %>
         <%= form.select :category, 
-            options_for_select([
-              ['Project Completion', 'Project Completion'],
-              ['Leadership', 'Leadership'],
-              ['Innovation', 'Innovation'],
-              ['Team Collaboration', 'Team Collaboration'],
-              ['Learning & Development', 'Learning & Development'],
-              ['Problem Solving', 'Problem Solving'],
-              ['Recognition', 'Recognition'],
-              ['Other', 'Other']
-            ], @achievement.category), 
+            options_for_select(Achievement.category_options, @achievement.category), 
             { prompt: 'Select a category...' }, 
-            { class: "form-control" } %>
-      </div>
-
-      <div class="form-group">
-        <%= form.label :brag_doc_category, "Brag Doc Category", class: "form-label" %>
-        <%= form.select :brag_doc_category, 
-            options_for_select(Achievement.brag_doc_category_options, @achievement.brag_doc_category), 
-            { prompt: 'Select brag doc category...' }, 
             { class: "form-control", data: { "brag-prompts-target": "category", action: "change->brag-prompts#categoryChanged" } } %>
-        <small class="form-text text-muted">This helps organize your achievements for promotion materials</small>
+        <small class="form-text text-muted" id="category-description">
+          Choose the category that best describes this achievement. All categories capture details for promotion materials.
+        </small>
       </div>
 
-      <div class="brag-doc-fields">
-        <h3 class="section-title">Brag Doc Details</h3>
+      <div class="brag-doc-fields" id="brag-doc-fields">
+        <h3 class="section-title">Additional Details for Promotion Materials</h3>
+        <p class="section-subtitle">These fields help you capture the impact and context needed for performance reviews and promotion discussions.</p>
         
         <div class="form-group">
           <%= form.label :impact_metrics, class: "form-label" %>

@@ -100,8 +100,8 @@ class AchievementsController < ApplicationController
 
   def achievement_params
     params.require(:achievement).permit(:title, :description, :date, :category, 
-                                      :brag_doc_category, :impact_metrics, 
-                                      :collaboration_details, :learning_outcomes, :goals_supported)
+                                      :impact_metrics, :collaboration_details, 
+                                      :learning_outcomes, :goals_supported)
   end
 
   def group_achievements_by_week(achievements)

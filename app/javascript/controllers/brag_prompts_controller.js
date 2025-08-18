@@ -15,9 +15,43 @@ export default class extends Controller {
     const category = this.categoryTarget.value
     const prompts = this.getPromptsForCategory(category)
     
+    // Update category description
+    this.updateCategoryDescription(category)
+    
+    // Show/hide brag doc fields based on category
+    this.toggleBragDocFields(category)
+    
     if (prompts) {
       this.updatePlaceholders(prompts)
       this.showGuidanceTooltips(prompts)
+    }
+  }
+  
+  updateCategoryDescription(category) {
+    const descriptions = {
+      'Projects': 'Major projects, features, and technical initiatives you led or contributed to',
+      'Leadership & Innovation': 'Leading teams, creative solutions, and driving organizational change',
+      'Collaboration & mentorship': 'Helping others, mentoring, knowledge sharing, and teamwork',
+      'Design & documentation': 'System design, technical documentation, and architectural decisions',
+      'Problem Solving & Recognition': 'Debugging, incident response, awards, and external recognition of your work',
+      'Company building': 'Process improvements, interviewing, recruiting, and organizational contributions',
+      'Learning & Development': 'New skills, technologies, methodologies, and professional growth',
+      'Outside of work': 'Open source, speaking, writing, and external professional activities'
+    }
+    
+    const descriptionElement = document.getElementById('category-description')
+    if (descriptionElement && descriptions[category]) {
+      descriptionElement.textContent = descriptions[category]
+    }
+  }
+  
+  toggleBragDocFields(category) {
+    // All categories now show brag doc fields
+    const bragDocFields = document.getElementById('brag-doc-fields')
+    
+    if (bragDocFields) {
+      bragDocFields.style.display = 'block'
+      bragDocFields.classList.add('active')
     }
   }
   
@@ -30,6 +64,14 @@ export default class extends Controller {
         collaborationDetails: "Who did you work with? Did you mentor anyone? What cross-team coordination was required? How did you help others succeed?",
         learningOutcomes: "What new technologies, frameworks, or architectural patterns did you learn? How did this expand your technical expertise?",
         goalsSupported: "How did this project align with team/company OKRs? Did it support a major initiative, compliance requirement, or strategic goal?"
+      },
+      "Leadership & Innovation": {
+        title: "e.g., Led initiative to adopt new testing framework, reducing bug reports by 60%",
+        description: "Describe how you led others, drove change, or introduced creative solutions to complex problems",
+        impactMetrics: "What was the measurable impact? How many people were affected? Did this improve team efficiency, product quality, or organizational capability?",
+        collaborationDetails: "How did you build consensus and get buy-in? Did you mentor others through the change? What resistance did you overcome?",
+        learningOutcomes: "What did you learn about leadership, change management, or innovation? How did this experience grow your skills?",
+        goalsSupported: "How did this leadership/innovation work advance team goals, company strategy, or your career development?"
       },
       "Collaboration & mentorship": {
         title: "e.g., Mentored 3 junior engineers through their first major feature releases",
@@ -47,6 +89,14 @@ export default class extends Controller {
         learningOutcomes: "What did you learn about system design, documentation practices, or technical communication?",
         goalsSupported: "How did this design work support broader architecture goals, team efficiency, or engineering standards?"
       },
+      "Problem Solving & Recognition": {
+        title: "e.g., Resolved critical production incident affecting 50% of users, received company-wide recognition",
+        description: "Describe the complex problem you solved, debugging process, or recognition you received for exceptional work",
+        impactMetrics: "What was the business impact? How quickly was it resolved? What recognition did you receive and from whom?",
+        collaborationDetails: "Who else was involved in the solution? How did you coordinate during the incident? Did you help others learn from it?",
+        learningOutcomes: "What technical or problem-solving skills did you develop? How did this recognition validate your growth?",
+        goalsSupported: "How does this demonstrate your value to the company? What does this recognition say about your career trajectory?"
+      },
       "Company building": {
         title: "e.g., Improved interview process by creating structured technical assessment framework",
         description: "Describe what company-wide process, practice, or initiative you contributed to beyond your direct team",
@@ -55,7 +105,7 @@ export default class extends Controller {
         learningOutcomes: "What did you learn about organizational change, process improvement, or cross-functional work?",
         goalsSupported: "How did this work support company-wide goals like scaling, culture, diversity, or operational excellence?"
       },
-      "What you learned": {
+      "Learning & Development": {
         title: "e.g., Mastered Kubernetes orchestration and cloud-native deployment patterns",
         description: "Describe the specific skills, technologies, or knowledge areas you developed",
         impactMetrics: "How did you apply this learning? Did it improve your work quality, efficiency, or enable new capabilities?",
@@ -70,14 +120,6 @@ export default class extends Controller {
         collaborationDetails: "Did you collaborate with others in the community? Did this work connect back to your team in any way?",
         learningOutcomes: "What skills did you develop through this external work? How does it make you a better engineer?",
         goalsSupported: "How does this external work enhance your professional brand or support your career advancement?"
-      },
-      "Wins or highlights": {
-        title: "e.g., Resolved critical production incident that was affecting 50% of users",
-        description: "Describe any significant accomplishment that doesn't fit neatly into other categories",
-        impactMetrics: "What was the measurable impact or result of this achievement?",
-        collaborationDetails: "Who else was involved? How did you coordinate with others to achieve this win?",
-        learningOutcomes: "What did you learn from this experience that you can apply to future work?",
-        goalsSupported: "How does this achievement demonstrate your value to the team and company?"
       }
     }
     

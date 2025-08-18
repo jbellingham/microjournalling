@@ -27,17 +27,7 @@
     <div class="filter-group">
       <%= form.label :category, "Category:", class: "filter-label" %>
       <%= form.select :category, 
-          options_for_select([
-            ['All Categories', ''],
-            ['Project Completion', 'Project Completion'],
-            ['Leadership', 'Leadership'],
-            ['Innovation', 'Innovation'],
-            ['Team Collaboration', 'Team Collaboration'],
-            ['Learning & Development', 'Learning & Development'],
-            ['Problem Solving', 'Problem Solving'],
-            ['Recognition', 'Recognition'],
-            ['Other', 'Other']
-          ], params[:category]), 
+          options_for_select([['All Categories', '']] + Achievement.category_options, params[:category]), 
           {}, 
           { class: "filter-select" } %>
     </div>
@@ -81,7 +71,9 @@
         <h3><%= achievement.title %></h3>
         <p class="achievement-date"><%= achievement.date.strftime("%B %d, %Y") if achievement.date %></p>
         <% if achievement.category.present? %>
-          <span class="achievement-category"><%= achievement.category %></span>
+          <span class="achievement-category brag-doc-category">
+            <%= achievement.display_category %>
+          </span>
         <% end %>
         <p class="achievement-description"><%= achievement.description %></p>
         <div class="achievement-actions">
