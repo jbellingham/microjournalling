@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(@achievement) do %>
-  <div class="form-container">
+  <div class="form-container" data-controller="brag-prompts">
     <h2>Edit Achievement</h2>
     
     <%= form_with model: @achievement, local: false, data: { turbo_frame: "_top" } do |form| %>
@@ -16,12 +16,12 @@
 
       <div class="form-group">
         <%= form.label :title, class: "form-label" %>
-        <%= form.text_field :title, class: "form-control" %>
+        <%= form.text_field :title, class: "form-control", data: { "brag-prompts-target": "title" } %>
       </div>
 
       <div class="form-group">
         <%= form.label :description, class: "form-label" %>
-        <%= form.text_area :description, class: "form-control", rows: 4 %>
+        <%= form.text_area :description, class: "form-control", rows: 4, data: { "brag-prompts-target": "description" } %>
       </div>
 
       <div class="form-group">
@@ -30,7 +30,7 @@
       </div>
 
       <div class="form-group">
-        <%= form.label :category, class: "form-label" %>
+        <%= form.label :category, "Traditional Category", class: "form-label" %>
         <%= form.select :category, 
             options_for_select([
               ['Project Completion', 'Project Completion'],
@@ -44,6 +44,51 @@
             ], @achievement.category), 
             { prompt: 'Select a category...' }, 
             { class: "form-control" } %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :brag_doc_category, "Brag Doc Category", class: "form-label" %>
+        <%= form.select :brag_doc_category, 
+            options_for_select(Achievement.brag_doc_category_options, @achievement.brag_doc_category), 
+            { prompt: 'Select brag doc category...' }, 
+            { class: "form-control", data: { "brag-prompts-target": "category", action: "change->brag-prompts#categoryChanged" } } %>
+        <small class="form-text text-muted">This helps organize your achievements for promotion materials</small>
+      </div>
+
+      <div class="brag-doc-fields">
+        <h3 class="section-title">Brag Doc Details</h3>
+        
+        <div class="form-group">
+          <%= form.label :impact_metrics, class: "form-label" %>
+          <%= form.text_area :impact_metrics, class: "form-control", rows: 3, 
+              placeholder: "Quantify the impact: saved $X, improved performance by Y%, used by Z users daily, etc.",
+              data: { "brag-prompts-target": "impactMetrics" } %>
+          <small class="form-text text-muted">Numbers and metrics that demonstrate the value of your work</small>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :collaboration_details, class: "form-label" %>
+          <%= form.text_area :collaboration_details, class: "form-control", rows: 3, 
+              placeholder: "Who did you work with? How did you mentor others? What cross-team collaboration occurred?",
+              data: { "brag-prompts-target": "collaborationDetails" } %>
+          <small class="form-text text-muted">Highlight mentorship, teamwork, and helping others</small>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :learning_outcomes, class: "form-label" %>
+          <%= form.text_area :learning_outcomes, class: "form-control", rows: 3, 
+              placeholder: "What new skills did you acquire? What technologies or processes did you learn?",
+              data: { "brag-prompts-target": "learningOutcomes" } %>
+          <small class="form-text text-muted">Document your professional growth and skill development</small>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :goals_supported, class: "form-label" %>
+          <%= form.text_area :goals_supported, class: "form-control", rows: 2, 
+              placeholder: "How does this achievement align with company or team goals?",
+              data: { "brag-prompts-target": "goalsSupported" } %>
+          <small class="form-text text-muted">Connect your work to broader organizational objectives</small>
+        </div>
       </div>
 
       <div class="form-actions">

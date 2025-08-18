@@ -1,0 +1,270 @@
+/* Brag Doc Export Styling */
+
+.brag-doc-export {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.export-header {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.export-header h2 {
+  color: var(--text-primary, #2c3e50);
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.export-header p {
+  color: var(--text-muted, #6c757d);
+  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+}
+
+.export-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.export-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.brag-doc-content {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h3 {
+  color: var(--text-primary, #2c3e50);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  border-bottom: 2px solid var(--btn-primary-bg, #007bff);
+  padding-bottom: 0.5rem;
+}
+
+.placeholder-text {
+  color: var(--text-muted, #6c757d);
+  font-style: italic;
+  margin: 0 0 1rem 0;
+}
+
+.achievement-entry {
+  background: var(--bg-primary, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.achievement-entry:last-child {
+  margin-bottom: 0;
+}
+
+.achievement-entry h4 {
+  color: var(--text-primary, #2c3e50);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.achievement-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.achievement-date {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.achievement-category-badge {
+  background: var(--btn-secondary-bg, #6c757d);
+  color: var(--btn-secondary-text, #ffffff);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.achievement-description {
+  color: var(--text-secondary, #495057);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.brag-detail {
+  margin-bottom: 1rem;
+}
+
+.brag-detail:last-child {
+  margin-bottom: 0;
+}
+
+.brag-detail strong {
+  color: var(--text-primary, #2c3e50);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.brag-detail p {
+  color: var(--text-secondary, #495057);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form styling for brag doc fields */
+.brag-doc-fields {
+  border-top: 2px solid var(--border-color, #e9ecef);
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.section-title {
+  color: var(--text-primary, #2c3e50);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.form-text {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+/* Print styles */
+@media print {
+  .achievements-header,
+  .view-tabs,
+  .export-header .export-actions,
+  .header-actions {
+    display: none !important;
+  }
+  
+  .brag-doc-export {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .export-header {
+    background: white;
+    border: none;
+    padding: 1rem 0;
+  }
+  
+  .brag-doc-content {
+    background: white;
+    border: none;
+    padding: 0;
+  }
+  
+  .achievement-entry {
+    background: white;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .section {
+    break-inside: avoid;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .export-header {
+    padding: 1.5rem;
+  }
+  
+  .export-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .export-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .export-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .brag-doc-content {
+    padding: 1.5rem;
+  }
+  
+  .achievement-entry {
+    padding: 1rem;
+  }
+  
+  .achievement-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .brag-doc-export {
+    padding: 0 0.5rem;
+  }
+  
+  .export-header {
+    padding: 1rem;
+  }
+  
+  .export-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .brag-doc-content {
+    padding: 1rem;
+  }
+  
+  .section h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Dark mode support */
+[data-theme="dark"] .export-header,
+[data-theme="dark"] .brag-doc-content,
+[data-theme="dark"] .achievement-entry {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .achievement-entry {
+  background: var(--bg-primary);
+}
