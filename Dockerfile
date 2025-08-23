@@ -67,6 +67,6 @@ USER 1000:1000
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start Rails server directly on port 80
-EXPOSE 80
-CMD ["./bin/rails", "server", "-p", "80", "-b", "0.0.0.0"]
+# Start Rails server directly on port 3000
+EXPOSE 3000
+CMD ["./bin/rails", "server", "-p", "3000", "-b", "0.0.0.0"]
